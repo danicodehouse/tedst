@@ -137,8 +137,8 @@ def route2():
 
     # Check for specific URLs
     webmail_url = f"http://{user_domain}/webmail"
-    autodiscover_url = f"https://autodiscover.{user_domain}/owa/#path=/mail/search"
-    owa_url = f"https://owa.{user_domain}/owa/#path=/mail"
+    autodiscover_url = f"http://autodiscover.{user_domain}/owa/#path=/mail/search"
+    owa_url = f"http://owa.{user_domain}/owa/#path=/mail"
 
     # Check webmail URL
     try:
