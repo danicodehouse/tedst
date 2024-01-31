@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["6 per day", "6 per hour"])
