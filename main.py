@@ -7,6 +7,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # made for education purposes only
 
 app = Flask(__name__)
